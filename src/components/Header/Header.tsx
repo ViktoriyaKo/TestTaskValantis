@@ -15,7 +15,7 @@ const Header = () => {
   return (
     <header>
       <div className={styles.topLine}>
-        <h2 className={styles.topLineText}>Test Task</h2>
+        <h2 className={styles.topLineText}>Test Task Valantis</h2>
       </div>
       <div className={styles.wrapper}>
         <img alt={'logo'} src={'/logo.png'} className={styles.logo} />

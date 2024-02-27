@@ -40,3 +40,10 @@ export const telegramHtml = `
 </defs>
 </svg>
 `;
+export const arrowLeft = `<svg width="7" height="12" viewBox="0 0 7 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M6.04797 11.7924L0.255676 6.00006L6.04797 0.207764L6.89949 1.05928L1.95873 6.00006L6.89949 10.9408L6.04797 11.7924Z" fill="#1C1B1F"/>
+</svg>`;
+
+export const arrowRight = `<svg width="7" height="12" viewBox="0 0 7 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M0.952029 11.7924L6.74432 6.00006L0.952029 0.207764L0.100509 1.05928L5.04127 6.00006L0.100509 10.9408L0.952029 11.7924Z" fill="#1C1B1F"/>
+</svg>`;

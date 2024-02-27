@@ -1,0 +1,43 @@
+.wrapper {
+  display: flex;
+  gap: 8px;
+  flex-direction: column;
+  padding: 16px;
+  cursor: pointer;
+  justify-content: space-between;
+}
+
+.wrapper:hover {
+  box-shadow: 0 4px 32px 0 #154a7b52;
+  transition: box-shadow 0.5s;
+}
+
+.image {
+  object-fit: cover;
+  max-width: 300px;
+  width: 100%;
+  align-self: center;
+}
+
+.price {
+  font-weight: 700;
+  color: rgb(17, 192, 17);
+  font-size: 16px;
+}
+
+.muted {
+  color: gray;
+}
+
+.button {
+  padding: 16px;
+  width: 100%;
+  border: none;
+  cursor: pointer;
+  min-width: 150px;
+  background-color: rgb(10 95 119);
+  text-transform: uppercase;
+  color: white;
+  font-weight: 700;
+  border-radius: 4px;
+}
