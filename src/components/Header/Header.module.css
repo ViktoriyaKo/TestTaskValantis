@@ -1,0 +1,43 @@
+.topLine {
+  background-color: black;
+  padding: 2px;
+}
+
+.topLineText {
+  text-transform: uppercase;
+  color: white;
+  font-size: 14px;
+  text-align: center;
+}
+
+.icon {
+  border-radius: 50%;
+  transition: box-shadow 0.5s;
+}
+
+.icon:hover {
+  transition: box-shadow 0.5s;
+  box-shadow: 1px 0px 5px 1px rgb(0 0 0), inset -31px 37px 70px rgb(0 0 0 / 75%);
+}
+
+.nav {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  align-items: center;
+}
+
+.wrapper {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 12px;
+  z-index: 10;
+  box-shadow: 0 0 43px 0 rgb(99 35 155 / 37%);
+}
+
+.logo {
+  width: 60px;
+  height: 60px;
+}
