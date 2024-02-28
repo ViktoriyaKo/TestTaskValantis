@@ -10,7 +10,7 @@ interface IProps {
 }
 
 const Pagination = (props: IProps) => {
-  const { totalCount = 4, pageSize = 2 } = props;
+  const { totalCount, pageSize = 2 } = props;
   const pagesCount = Math.ceil(totalCount / pageSize);
   const location = useLocation();
   const page = parseInt(location.search?.split('=')[1] || '1');

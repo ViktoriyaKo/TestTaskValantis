@@ -33,6 +33,8 @@ const Home = () => {
     },
   ]);
 
+  const totalCount = products.length;
+
   // useEffect(() => {
   //   const getData = async () => {
   //     const data = await requestToDB('get_ids', { offset: 1, limit: 10 });
@@ -51,7 +53,7 @@ const Home = () => {
           return <Card key={card.id} card={card} />;
         })}
       </div>
-      <Pagination />
+      <Pagination totalCount={totalCount} />
     </div>
   );
 };

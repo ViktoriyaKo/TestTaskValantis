@@ -1,4 +1,6 @@
+import { Link } from 'react-router-dom';
 import { ICard } from '../../types/types';
+import CustomLink from '../CustomLink/CustomLink';
 import styles from './Card.module.css';
 
 interface Props {
@@ -6,16 +8,19 @@ interface Props {
 }
 
 const Card = (props: Props) => {
-  const { brand, price, product } = props.card;
+  const { brand, price, product, id } = props.card;
 
   return (
-    <div className={styles.wrapper}>
-      <img alt={product} src={'/logo.png'} className={styles.image} />
+    <Link to={`/${id}`} className={styles.wrapper}>
+      <img alt={product} src={'/jewelry.jpg'} className={styles.image} />
       <p className={styles.price}>{price} ₽</p>
       <h3 className={styles.muted}>{brand}</h3>
-      <p>{product}</p>
-      <button className={styles.button}>Заказать сейчас</button>
-    </div>
+      <p className={styles.product}>{product}</p>
+      <CustomLink
+        text={'Заказать сейчас'}
+        href={'https://telegram.me/viktoriya_000001'}
+      />
+    </Link>
   );
 };
 

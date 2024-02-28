@@ -8,20 +8,20 @@
 }
 
 .wrapper:hover {
-  box-shadow: 0 4px 32px 0 #154a7b52;
+  box-shadow: 0 4px 32px 0 var(--color-blue-dark);
   transition: box-shadow 0.5s;
 }
 
 .image {
   object-fit: cover;
-  max-width: 300px;
+  height: 300px;
   width: 100%;
   align-self: center;
 }
 
 .price {
   font-weight: 700;
-  color: rgb(17, 192, 17);
+  color: var(--color-blue-dark);
   font-size: 16px;
 }
 
@@ -29,15 +29,6 @@
   color: gray;
 }
 
-.button {
-  padding: 16px;
-  width: 100%;
-  border: none;
-  cursor: pointer;
-  min-width: 150px;
-  background-color: rgb(10 95 119);
-  text-transform: uppercase;
-  color: white;
-  font-weight: 700;
-  border-radius: 4px;
+.product {
+  color: black;
 }

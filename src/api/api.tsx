@@ -10,6 +10,7 @@ const getTimestamp = () => {
 };
 
 const setOptions = () => {
+  // const password = process.env.REACT_APP_PASSWORD_API;
   const password = 'Valantis';
   const timestamp = getTimestamp();
   const string = `${password}_${timestamp}`;

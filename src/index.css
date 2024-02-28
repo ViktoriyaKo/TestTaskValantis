@@ -4,6 +4,7 @@
   font-weight: 400;
   max-width: 1280px;
   margin: 0 auto;
+  --color-blue-dark: #154a7b;
 }
 
 *,
@@ -34,4 +35,8 @@ h3,
 h4,
 p {
   margin: 0;
+}
+
+a {
+  text-decoration: none;
 }
