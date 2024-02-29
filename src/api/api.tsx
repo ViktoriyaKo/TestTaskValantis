@@ -1,5 +1,10 @@
 import md5 from 'md5';
 import { ICard } from '../types/types';
+import qs from 'qs';
+
+const URL = import.meta.env.VITE_URL;
+const method = { POST: 'POST' };
+const productsLimit = 50;
 
 const getTimestamp = () => {
   const now = new Date();
@@ -10,23 +15,26 @@ const getTimestamp = () => {
 };
 
 const setOptions = () => {
-  // const password = process.env.REACT_APP_PASSWORD_API;
-  const password = 'Valantis';
+  const password = import.meta.env.VITE_PASSWORD_API;
   const timestamp = getTimestamp();
   const string = `${password}_${timestamp}`;
   return md5(string).toString();
 };
 
-export const requestToDB = async (
+const setHeaders = () => {
+  const xAuth = setOptions();
+  return { 'Content-Type': 'application/json', 'X-Auth': xAuth };
+};
+
+const requestToDB = async (
   action: string,
   params: string,
   setData?: (arg: ICard[]) => void
 ) => {
   try {
-    const xAuth = setOptions();
-    const response = await fetch('http://api.valantis.store:40000/', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'X-Auth': xAuth },
+    const response = await fetch(URL, {
+      method: method.POST,
+      headers: setHeaders(),
       body: JSON.stringify({ action: action, params: params }),
     });
     const data = await response.json();
@@ -45,4 +53,44 @@ export const requestToDB = async (
   } catch (err) {
     console.log(err);
   }
+};
+
+export const getAllBrands = async (setOptions) => {
+  try {
+    const response = await fetch(URL, {
+      method: method.POST,
+      headers: setHeaders(),
+      body: JSON.stringify({
+        action: 'get_fields',
+        params: { field: 'brand' },
+      }),
+    });
+    const data = await response.json();
+    const newData = await data.result.filter((item: string) => item);
+    const uniqueBrandsArray = [...new Set(newData)].sort();
+    setOptions(uniqueBrandsArray);
+    return uniqueBrandsArray;
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+const setParamsQuery = () => {};
+
+export const getAllProducts = async (setProducts) => {
+  const productsIds = await requestToDB('get_ids', {
+    offset: 1,
+    limit: productsLimit,
+  });
+  await requestToDB('get_items', { ids: productsIds }, setProducts);
+  return;
+};
+
+export const setFilters = async (filters, setProducts) => {
+  const params = qs.parse(location.search.substring(1));
+  const ids = await requestToDB('filter', {
+    brand: 'Piaget',
+  });
+  await requestToDB('get_items', { ids: ids }, setProducts);
+  return;
 };

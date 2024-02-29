@@ -1,46 +1,53 @@
-import { useState } from 'react';
+import { memo } from 'react';
 import { arrowLeft, arrowRight } from '../../assets/iconsHtml';
 import { Icon } from '../../helpers/Icon';
 import styles from './Pagination.module.css';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
+import qs from 'qs';
 
 interface IProps {
   totalCount: number;
   pageSize?: number;
 }
 
-const Pagination = (props: IProps) => {
+const Pagination = memo((props: IProps) => {
   const { totalCount, pageSize = 2 } = props;
   const pagesCount = Math.ceil(totalCount / pageSize);
   const location = useLocation();
-  const page = parseInt(location.search?.split('=')[1] || '1');
-  const [currentPage, setCurrentPage] = useState(page);
+  const navigate = useNavigate();
+
+  const [searchParams] = useSearchParams();
+  const page = Number(searchParams.get('page') || 1);
+  const params = qs.parse(location.search.substring(1));
+
   const handlePageChange = (page: string) => {
-    // navigate({ search: queryParams.toString() });
+    navigate({
+      pathname: '/',
+      search: qs.stringify({ ...params, page: String(page) }),
+    });
   };
-  console.log(currentPage);
 
   return (
     <div className={styles.wrapper}>
       <button
-        disabled={currentPage < 2}
+        disabled={page < 2}
         className={styles.button}
-        // onClick={() => movePrevious(currentPage)}
+        onClick={() => handlePageChange(`${page - 1}`)}
       >
         <Icon html={arrowLeft} />
       </button>
       <div className={styles.text}>
-        {currentPage} из {pagesCount}
+        {page} из {pagesCount}
       </div>
       <button
         className={styles.button}
-        disabled={currentPage >= pagesCount}
-        onClick={() => handlePageChange(`${currentPage + 1}`)}
+        disabled={page >= pagesCount}
+        onClick={() => handlePageChange(`${page + 1}`)}
       >
         <Icon html={arrowRight} />
       </button>
     </div>
   );
-};
+});
 
 export default Pagination;

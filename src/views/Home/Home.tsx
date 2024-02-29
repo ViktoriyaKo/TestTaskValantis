@@ -1,14 +1,21 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Card from '../../components/Card/Card';
 import Pagination from '../../components/Pagination/Pagination';
 import styles from './Home.module.css';
-import { requestToDB } from '../../api/api';
-import { ascendingIcon } from '../../assets/iconsHtml';
+import {
+  getAllBrands,
+  getAllProducts,
+  requestToDB,
+  setFilters,
+} from '../../api/api';
 import Search from '../../components/Search/Search';
 import Filter from '../../components/Filter/Filter';
-import InputFilter from '../../components/Filter/InputFilter';
+import { useLocation } from 'react-router-dom';
 
 const Home = () => {
+  const location = useLocation();
+  const isFirstRender = useRef(false);
+
   const [products, setProducts] = useState([
     {
       brand: null,
@@ -37,7 +44,42 @@ const Home = () => {
     },
   ]);
 
+  const [options, setOptions] = useState([
+    'Alfieri & St.John',
+    'Audemars Piguet',
+    'Baraka',
+    'Bibigi',
+    'Bvlgari',
+    'Carrera y Carrera',
+    'Cartier',
+    'Casa Gi',
+    'Casato',
+    'Chaumet',
+    'Van Cleef & Arpels',
+  ]);
+
   const totalCount = products.length;
+
+  useEffect(() => {
+    if (isFirstRender.current) {
+      const updateData = async () => {
+        setFilters(location.search, setProducts);
+      };
+      updateData();
+    }
+  }, [location.search]);
+
+  useEffect(() => {
+    // set-dates:
+    const getData = async () => {
+      await getAllBrands(setOptions);
+      await getAllProducts(setProducts);
+      return;
+    };
+
+    // getData();
+    isFirstRender.current = true;
+  }, []);
 
   // useEffect(() => {
   //   const getData = async () => {
@@ -54,11 +96,15 @@ const Home = () => {
       <h1 className={styles.title}>Каталог</h1>
       <div className={styles.inner}>
         <div className={styles.filtersWrapper}>
-          <Filter />
-          <Search placeholder="Введите стоимость..." type={'number'} />
+          <Filter options={options} />
+          <Search
+            placeholder="Введите стоимость..."
+            type={'number'}
+            queryString={'price'}
+          />
         </div>
         <div className={styles.catalogWrapper}>
-          <Search placeholder="Начните поиск..." />
+          <Search placeholder="Начните поиск..." queryString={'search'} />
           <div className={styles.wrapper}>
             {products.map((card) => {
               return <Card key={card.id} card={card} />;
