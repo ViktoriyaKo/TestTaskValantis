@@ -1,16 +1,22 @@
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { instagramHtml, phoneHtml, telegramHtml } from '../../assets/iconsHtml';
 import { Icon } from '../../helpers/Icon';
 import styles from './Header.module.css';
+import { routers } from '../../routers/routers';
+import clsx from 'clsx';
 
 const Header = () => {
+  const location = useLocation();
+  const pathname = location.pathname;
+
   const navIcons = [
     {
+      id: 1,
       icon: instagramHtml,
       href: 'https://telegram.me/viktoriya_000001',
     },
-    { icon: telegramHtml, href: 'https://telegram.me/viktoriya_000001' },
-    { icon: phoneHtml, href: 'https://wa.me/79817805044' },
+    { id: 2, icon: telegramHtml, href: 'https://telegram.me/viktoriya_000001' },
+    { id: 3, icon: phoneHtml, href: 'https://wa.me/79817805044' },
   ];
 
   return (
@@ -22,11 +28,24 @@ const Header = () => {
         <Link to={'/'}>
           <img alt={'logo'} src={'/logo.png'} className={styles.logo} />
         </Link>
+        <nav className={styles.navList}>
+          {routers.map((router) => {
+            return (
+              <Link
+                key={router.path}
+                className={clsx({ [styles.active]: pathname === router.path })}
+                to={router.path}
+              >
+                {router.title}
+              </Link>
+            );
+          })}
+        </nav>
 
         <ul className={styles.nav}>
           {navIcons.map((icon) => {
             return (
-              <li key={icon.href} className={styles.icon}>
+              <li key={icon.id} className={styles.icon}>
                 <a href={icon.href}>
                   <Icon html={icon.icon} />
                 </a>

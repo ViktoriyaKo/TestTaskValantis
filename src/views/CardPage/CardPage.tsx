@@ -19,11 +19,12 @@ const CardPage = () => {
       </div>
 
       <div className={styles.content}>
+        <p className={styles.muted}>ID: {product.id}</p>
         <h1 className={styles.title}>{product.product}</h1>
         <h3 className={styles.description}>{product.brand}</h3>
         <span className={styles.price}>{product.price} ₽</span>
         <CustomLink
-          text={'Заказать сейчас'}
+          text={'Купить'}
           href={'https://telegram.me/viktoriya_000001'}
         />
       </div>

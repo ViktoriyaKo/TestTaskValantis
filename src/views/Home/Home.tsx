@@ -1,8 +1,12 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Card from '../../components/Card/Card';
 import Pagination from '../../components/Pagination/Pagination';
 import styles from './Home.module.css';
 import { requestToDB } from '../../api/api';
+import { ascendingIcon } from '../../assets/iconsHtml';
+import Search from '../../components/Search/Search';
+import Filter from '../../components/Filter/Filter';
+import InputFilter from '../../components/Filter/InputFilter';
 
 const Home = () => {
   const [products, setProducts] = useState([
@@ -48,12 +52,21 @@ const Home = () => {
   return (
     <div className={styles.container}>
       <h1 className={styles.title}>Каталог</h1>
-      <div className={styles.wrapper}>
-        {products.map((card) => {
-          return <Card key={card.id} card={card} />;
-        })}
+      <div className={styles.inner}>
+        <div className={styles.filtersWrapper}>
+          <Filter />
+          <Search placeholder="Введите стоимость..." type={'number'} />
+        </div>
+        <div className={styles.catalogWrapper}>
+          <Search placeholder="Начните поиск..." />
+          <div className={styles.wrapper}>
+            {products.map((card) => {
+              return <Card key={card.id} card={card} />;
+            })}
+          </div>
+          <Pagination totalCount={totalCount} />
+        </div>
       </div>
-      <Pagination totalCount={totalCount} />
     </div>
   );
 };

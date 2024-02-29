@@ -23,8 +23,33 @@
 .nav {
   display: flex;
   justify-content: center;
-  gap: 24px;
+  gap: var(--standard-gap);
   align-items: center;
+}
+
+.navList {
+  display: flex;
+  gap: 8px;
+  text-transform: uppercase;
+  font-weight: 500;
+  color: black;
+}
+
+.navList a {
+  transition: all 0.3s;
+}
+
+.navList a:hover {
+  color: var(--color-primary);
+  text-shadow: 0 1px 2px black;
+  transition: all 0.3s;
+}
+
+@media (width >= 768px) {
+  .navList {
+    gap: var(--standard-gap);
+    padding-left: 50px;
+  }
 }
 
 .wrapper {
@@ -40,4 +65,9 @@
 .logo {
   width: 60px;
   height: 60px;
+}
+
+.active {
+  color: var(--color-primary);
+  text-shadow: 0 1px 2px black;
 }

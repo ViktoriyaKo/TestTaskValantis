@@ -4,7 +4,9 @@
   font-weight: 400;
   max-width: 1280px;
   margin: 0 auto;
-  --color-blue-dark: #154a7b;
+
+  --color-primary: rgb(10 95 119);
+  --standard-gap: 24px;
 }
 
 *,
@@ -39,4 +41,9 @@ p {
 
 a {
   text-decoration: none;
+}
+
+button {
+  border: none;
+  cursor: pointer;
 }

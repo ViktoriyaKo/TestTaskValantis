@@ -13,13 +13,11 @@ const Card = (props: Props) => {
   return (
     <Link to={`/${id}`} className={styles.wrapper}>
       <img alt={product} src={'/jewelry.jpg'} className={styles.image} />
+      <h3 className={styles.desc}>ID: {id}</h3>
       <p className={styles.price}>{price} ₽</p>
       <h3 className={styles.muted}>{brand}</h3>
       <p className={styles.product}>{product}</p>
-      <CustomLink
-        text={'Заказать сейчас'}
-        href={'https://telegram.me/viktoriya_000001'}
-      />
+      <CustomLink text={'Заказать сейчас'} />
     </Link>
   );
 };

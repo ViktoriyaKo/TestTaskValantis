@@ -1,0 +1,31 @@
+.container {
+  padding: 20px;
+  padding-top: 50px;
+  display: flex;
+  flex-direction: column;
+  gap: 50px;
+  min-height: calc(100vh - 150px);
+}
+
+.textWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 20px;
+  border-radius: 4px;
+  box-shadow: 0 4px 32px 0 var(--color-primary);
+}
+
+.bold {
+  font-weight: 700;
+}
+
+.text {
+  color: green;
+  font-weight: 700;
+}
+
+.link {
+  font-weight: 700;
+  color: blue;
+}

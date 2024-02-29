@@ -1,0 +1,60 @@
+.fieldset {
+  overflow-y: auto;
+  height: 300px;
+  border: none;
+}
+
+.container {
+  border-radius: 4px;
+  color: white;
+  background-color: var(--color-primary);
+}
+
+.legend {
+  position: relative;
+  text-align: center;
+  font-size: 20px;
+  text-transform: uppercase;
+  padding: 8px 12px;
+  border-bottom: 1px solid white;
+  width: 100%;
+}
+
+.input[type='checkbox'] {
+  display: none;
+}
+
+.wrapper label {
+  cursor: pointer;
+  padding-bottom: 2px;
+  font-size: 16px;
+}
+
+.wrapper label:before {
+  content: ' ';
+  color: black;
+  display: inline-block;
+  font: 20px/30px Arial;
+  font-weight: 700;
+  margin-right: 15px;
+  position: relative;
+  text-align: center;
+  width: 20px;
+  height: 20px;
+  background: #fff;
+  border: 1px solid black;
+  border-image: initial;
+  vertical-align: middle;
+  border-radius: 5px;
+}
+
+/* checked */
+.input:checked + label:before {
+  content: '\2605';
+  line-height: 0.9;
+}
+/* disabled */
+.input:disabled + label:before {
+  background: #eee;
+  color: #aaa;
+}

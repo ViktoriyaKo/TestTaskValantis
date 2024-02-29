@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import styles from './CustomLink.module.css';
 
 interface IProps {
@@ -7,10 +8,12 @@ interface IProps {
 
 const CustomLink = (props: IProps) => {
   const { text, href } = props;
-  return (
-    <a href={href} className={styles.link} onClick={(e) => e.stopPropagation()}>
+  return href ? (
+    <Link to={href} className={styles.link}>
       {text}
-    </a>
+    </Link>
+  ) : (
+    <button className={styles.link}>{text}</button>
   );
 };
 

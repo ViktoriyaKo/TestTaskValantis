@@ -3,8 +3,8 @@
   padding-top: 50px;
   display: flex;
   flex-direction: column;
-  gap: 24px;
-  min-height: calc(100vh - 155px);
+  gap: var(--standard-gap);
+  min-height: calc(100vh - 150px);
   justify-content: space-evenly;
 }
 
@@ -34,7 +34,12 @@
 .price {
   font-size: 20px;
   font-weight: 700;
-  color: var(--color-blue-dark);
+  color: var(--color-primary);
+}
+
+.muted {
+  color: gray;
+  font-size: 14px;
 }
 
 @media (width >= 568px) {
