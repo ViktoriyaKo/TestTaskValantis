@@ -24,7 +24,7 @@ const About = () => {
           препроцессоров
         </li>
         <li>
-          <span className={styles.bold}>Комментарии:</span>
+          <span className={styles.bold}>Комментарии:&nbsp;</span>
           <span className={styles.text}>
             Изначально сделала мультифильтры. API поддерживает только
             single-фильтрацию, поэтому убрала возможность фильтровать по
