@@ -1,33 +1,45 @@
+import { useEffect, useState } from 'react';
 import CustomLink from '../../components/CustomLink/CustomLink';
 import styles from './CardPage.module.css';
+import { requestToDB } from '../../api/api';
+import { useParams } from 'react-router-dom';
+import { ICard } from '../../types/types';
 
 const CardPage = () => {
-  const product = {
-    brand: 'brand',
-    id: '1789ecf3-f81c-4f49-ada2-83804dcc74b0',
-    price: 16700.0,
-    product: 'Золотое кольцо с бриллиантами',
-  };
+  const [product, setProduct] = useState<ICard[]>([]);
+  const { id } = useParams();
+
+  useEffect(() => {
+    const getData = async () => {
+      requestToDB('get_items', { ids: [id] }, setProduct);
+    };
+    getData();
+  }, []);
+
   return (
     <div className={styles.container}>
-      <div className={styles.content}>
-        <img
-          src={'/jewelry.jpg'}
-          alt={product.product}
-          className={styles.image}
-        />
-      </div>
+      {product && product.length > 0 && (
+        <>
+          <div className={styles.content}>
+            <img
+              src={'/jewelry.jpg'}
+              alt={product[0].product}
+              className={styles.image}
+            />
+          </div>
 
-      <div className={styles.content}>
-        <p className={styles.muted}>ID: {product.id}</p>
-        <h1 className={styles.title}>{product.product}</h1>
-        <h3 className={styles.description}>{product.brand}</h3>
-        <span className={styles.price}>{product.price} ₽</span>
-        <CustomLink
-          text={'Купить'}
-          href={'https://telegram.me/viktoriya_000001'}
-        />
-      </div>
+          <div className={styles.content}>
+            <p className={styles.muted}>ID: {product[0].id}</p>
+            <h1 className={styles.title}>{product[0].product}</h1>
+            <h3 className={styles.description}>{product[0].brand}</h3>
+            <span className={styles.price}>{product[0].price} ₽</span>
+            <CustomLink
+              text={'Купить'}
+              href={'https://telegram.me/viktoriya_000001'}
+            />
+          </div>
+        </>
+      )}
     </div>
   );
 };

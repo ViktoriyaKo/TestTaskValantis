@@ -31,7 +31,7 @@ const setHeaders = () => {
   return { 'Content-Type': 'application/json', 'X-Auth': xAuth };
 };
 
-const requestToDB = async (
+export const requestToDB = async (
   action: string,
   params: IParams,
   setData?: Dispatch<SetStateAction<ICard[]>>
@@ -53,7 +53,8 @@ const requestToDB = async (
             uniqueProductsArray.push(product);
           }
         });
-        return setData(uniqueProductsArray);
+        setData(uniqueProductsArray);
+        return uniqueProductsArray;
       } else {
         const uniqueProductsArray = [...new Set(data.result)];
         return uniqueProductsArray;
@@ -74,23 +75,34 @@ export const getAllBrands = async (
   setOptions: Dispatch<SetStateAction<string[]>>,
   setTotalProducts: Dispatch<SetStateAction<number>>
 ) => {
-  try {
-    const response = await fetch(URL_FETCH, {
-      method: method.POST,
-      headers: setHeaders(),
-      body: JSON.stringify({
-        action: 'get_fields',
-        params: { field: 'brand' },
-      }),
-    });
-    const data = await response.json();
-    setTotalProducts(data.result.length);
-    const newData: string[] = await data.result.filter((item: string) => item);
-    const uniqueBrandsArray = [...new Set(newData)].sort();
-    setOptions(uniqueBrandsArray);
-    return uniqueBrandsArray;
-  } catch (err) {
-    console.log(err);
+  let retryCount = 0;
+  while (retryCount < MAX_RETRY_COUNT) {
+    try {
+      const response = await fetch(URL_FETCH, {
+        method: method.POST,
+        headers: setHeaders(),
+        body: JSON.stringify({
+          action: 'get_fields',
+          params: { field: 'brand' },
+        }),
+      });
+      const data = await response.json();
+      setTotalProducts(data.result.length);
+      const newData: string[] = await data.result.filter(
+        (item: string) => item
+      );
+      const uniqueBrandsArray = [...new Set(newData)].sort();
+      setOptions(uniqueBrandsArray);
+      return uniqueBrandsArray;
+    } catch (error) {
+      console.log('Error occurred during request:', error);
+      retryCount++;
+      if (retryCount === MAX_RETRY_COUNT) {
+        console.log('Max retry count reached', error);
+      }
+      console.log(`Retrying... Attempt ${retryCount}`);
+      await new Promise((resolve) => setTimeout(resolve, RETRY_DELAY_MS));
+    }
   }
 };
 
