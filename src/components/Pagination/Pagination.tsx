@@ -2,8 +2,7 @@ import { memo } from 'react';
 import { arrowLeft, arrowRight } from '../../assets/iconsHtml';
 import { Icon } from '../../helpers/Icon';
 import styles from './Pagination.module.css';
-import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
-import qs from 'qs';
+import { useSearchParams } from 'react-router-dom';
 
 interface IProps {
   totalCount: number;
@@ -11,19 +10,22 @@ interface IProps {
 }
 
 const Pagination = memo((props: IProps) => {
-  const { totalCount, pageSize = 2 } = props;
+  const { totalCount, pageSize = 50 } = props;
   const pagesCount = Math.ceil(totalCount / pageSize);
-  const location = useLocation();
-  const navigate = useNavigate();
 
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const page = Number(searchParams.get('page') || 1);
-  const params = qs.parse(location.search.substring(1));
 
   const handlePageChange = (page: string) => {
-    navigate({
-      pathname: '/',
-      search: qs.stringify({ ...params, page: String(page) }),
+    setSearchParams({ page: page });
+    scrollToTop();
+  };
+
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: 'smooth',
     });
   };
 

@@ -1,69 +1,37 @@
-import { useEffect, useRef, useState } from 'react';
+import { memo, useEffect, useMemo, useRef, useState } from 'react';
 import Card from '../../components/Card/Card';
 import Pagination from '../../components/Pagination/Pagination';
 import styles from './Home.module.css';
-import {
-  getAllBrands,
-  getAllProducts,
-  requestToDB,
-  setFilters,
-} from '../../api/api';
+import { getAllBrands, getAllProducts, setFilters } from '../../api/api';
 import Search from '../../components/Search/Search';
 import Filter from '../../components/Filter/Filter';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useSearchParams } from 'react-router-dom';
 
-const Home = () => {
+import Spinner from '../../components/Spinner/Spinner';
+import { ICard } from '../../types/types';
+import { queryInApp } from '../../config';
+
+const Home = memo(() => {
   const location = useLocation();
   const isFirstRender = useRef(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [totalProducts, setTotalProducts] = useState(0);
+  const [products, setProducts] = useState<ICard[]>([]);
+  const [options, setOptions] = useState<string[]>([]);
 
-  const [products, setProducts] = useState([
-    {
-      brand: null,
-      id: '2b7c7643-6852-4562-8a72-7666c72b3518',
-      price: 12500,
-      product: 'Золотое кольцо с топазом и бриллиантами',
-    },
-    {
-      brand: null,
-      id: '9f2722a8-dac6-4f71-b877-1731d30ae6db',
-      price: 8500,
-      product: 'Золотое кольцо с бриллиантами и изумрудом',
-    },
+  const [searchParams] = useSearchParams();
 
-    {
-      brand: 'Piaget',
-      id: '91a4056d-462d-4469-b97d-1d442d1e2fbc',
-      price: 23363,
-      product: 'Золотое колье с рубинами и бриллиантами',
-    },
-    {
-      brand: 'Jacob & Co',
-      id: '18e4e3bd-5e60-4348-8c92-4f61c676be1f',
-      price: 52400,
-      product: 'Золотое кольцо с бриллиантом',
-    },
-  ]);
+  const isParamsInQuery = useMemo(() => {
+    return queryInApp.some((item) => location.search.includes(item));
+  }, [location.search]);
 
-  const [options, setOptions] = useState([
-    'Alfieri & St.John',
-    'Audemars Piguet',
-    'Baraka',
-    'Bibigi',
-    'Bvlgari',
-    'Carrera y Carrera',
-    'Cartier',
-    'Casa Gi',
-    'Casato',
-    'Chaumet',
-    'Van Cleef & Arpels',
-  ]);
-
-  const totalCount = products.length;
+  const isShowPagination =
+    !isLoading && totalProducts && products.length > 0 && !isParamsInQuery;
 
   useEffect(() => {
     if (isFirstRender.current) {
       const updateData = async () => {
-        setFilters(location.search, setProducts);
+        await setFilters(location.search, setProducts);
       };
       updateData();
     }
@@ -71,25 +39,21 @@ const Home = () => {
 
   useEffect(() => {
     // set-dates:
+    const initialPage = Number(searchParams.get('page') || 1);
+    setIsLoading(true);
     const getData = async () => {
-      await getAllBrands(setOptions);
-      await getAllProducts(setProducts);
+      await getAllBrands(setOptions, setTotalProducts);
+      if (!isParamsInQuery) {
+        await getAllProducts(setProducts, initialPage);
+      } else {
+        await setFilters(location.search, setProducts);
+      }
+      setIsLoading(false);
       return;
     };
-
-    // getData();
+    getData();
     isFirstRender.current = true;
   }, []);
-
-  // useEffect(() => {
-  //   const getData = async () => {
-  //     const data = await requestToDB('get_ids', { offset: 1, limit: 10 });
-
-  //     await requestToDB('get_items', { ids: data }, setProducts);
-  //     return;
-  //   };
-  //   getData();
-  // }, []);
 
   return (
     <div className={styles.container}>
@@ -105,16 +69,28 @@ const Home = () => {
         </div>
         <div className={styles.catalogWrapper}>
           <Search placeholder="Начните поиск..." queryString={'search'} />
-          <div className={styles.wrapper}>
-            {products.map((card) => {
-              return <Card key={card.id} card={card} />;
-            })}
-          </div>
-          <Pagination totalCount={totalCount} />
+          {!isLoading ? (
+            <div className={styles.wrapper}>
+              {products && products.length > 0 ? (
+                products.map((card) => {
+                  return <Card key={card.id} card={card} />;
+                })
+              ) : (
+                <h4 className={styles.notFoundText}>
+                  Поиск не дал результатов &#128542;
+                </h4>
+              )}
+            </div>
+          ) : (
+            <Spinner loading={true} />
+          )}
+          {isShowPagination ? (
+            <Pagination pageSize={50} totalCount={totalProducts} />
+          ) : null}
         </div>
       </div>
     </div>
   );
-};
+});
 
 export default Home;

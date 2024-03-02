@@ -31,6 +31,7 @@
 
 .product {
   color: black;
+  flex: 1;
 }
 
 .desc {

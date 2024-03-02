@@ -1,7 +1,6 @@
-import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import styles from './Filter.module.css';
 
-import qs from 'qs';
 import { ChangeEvent, memo } from 'react';
 
 interface IProps {
@@ -10,45 +9,20 @@ interface IProps {
 
 const Filter = memo((props: IProps) => {
   const options = props.options;
-  const location = useLocation();
-  const navigate = useNavigate();
-
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const filterQuery = searchParams.get('brand');
-  const filterArray = filterQuery?.split(',');
-
-  const params = qs.parse(location.search.substring(1));
 
   const handlerChange = (e: ChangeEvent<HTMLInputElement>) => {
     const target = e.target;
     const { value, checked } = target;
 
     if (checked) {
-      if (filterArray?.includes(value)) {
-        return;
-      } else {
-        const newFilter = filterArray ? [...filterArray, value] : [value];
-
-        navigate({
-          pathname: '/',
-          search: qs.stringify({ ...params, brand: newFilter.join(',') }),
-        });
+      if (!filterQuery?.includes(value)) {
+        const encodedValue = encodeURIComponent(value);
+        setSearchParams(`brand=${encodedValue}`);
       }
     } else {
-      const newFilter =
-        filterArray && filterArray.filter((item) => item !== value);
-
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { brand, ...rest } = params;
-      const search =
-        newFilter && newFilter.length > 0
-          ? { ...params, brand: newFilter.join(',') }
-          : { ...rest };
-
-      navigate({
-        pathname: '/',
-        search: qs.stringify(search),
-      });
+      setSearchParams('');
     }
   };
 
@@ -59,7 +33,7 @@ const Filter = memo((props: IProps) => {
         {options &&
           options.length > 0 &&
           options.map((brand) => {
-            const isChecked = filterArray?.includes(brand) ? true : false;
+            const isChecked = filterQuery === brand;
             return (
               <div className={styles.wrapper} key={brand}>
                 <input

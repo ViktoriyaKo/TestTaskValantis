@@ -9,6 +9,6 @@
   text-transform: uppercase;
   color: white;
   font-weight: 700;
-  border-radius: 4px;
+  border-radius: var(--standard-border-radius);
   text-align: center;
 }

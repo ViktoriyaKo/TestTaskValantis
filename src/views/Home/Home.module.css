@@ -35,6 +35,13 @@
   gap: 8px;
 }
 
+.notFoundText {
+  text-align: center;
+  padding: var(--standard-gap);
+  text-transform: uppercase;
+  color: var(--color-primary);
+}
+
 @media (width >= 768px) {
   .wrapper {
     gap: 20px;

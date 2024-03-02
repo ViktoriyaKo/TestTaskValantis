@@ -1,9 +1,8 @@
-import { ChangeEvent, useCallback, useEffect, useState } from 'react';
+import { ChangeEvent, memo, useCallback, useEffect, useState } from 'react';
 import { crossIcon, searchIcon } from '../../assets/iconsHtml';
 import { Icon } from '../../helpers/Icon';
 import styles from './Search.module.css';
-import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
-import qs from 'qs';
+import { useSearchParams } from 'react-router-dom';
 
 interface IProps {
   placeholder: string;
@@ -11,31 +10,20 @@ interface IProps {
   queryString: string;
 }
 
-const Search = (props: IProps) => {
+const Search = memo((props: IProps) => {
   const { placeholder, type = 'text', queryString } = props;
-  const location = useLocation();
-  const navigate = useNavigate();
-
   const [searchParams, setSearchParams] = useSearchParams();
   const searchQuery = searchParams.get(queryString) || '';
   const [searchValue, setSearchValue] = useState(searchQuery);
-  const params = qs.parse(location.search.substring(1));
 
-  const clearSearch = () => {
-    delete params[queryString];
+  const clearSearch = useCallback(() => {
     setSearchValue('');
-    setSearchParams(qs.stringify(params));
-  };
+    setSearchParams('');
+  }, [setSearchParams]);
 
-  const search = () => {
-    console.log('start...');
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { page, ...rest } = params;
-    navigate({
-      pathname: '/',
-      search: qs.stringify({ ...rest, [queryString]: searchValue }),
-    });
-  };
+  const search = useCallback(() => {
+    setSearchParams({ [queryString]: searchValue });
+  }, [queryString, searchValue, setSearchParams]);
 
   const startSearch = useCallback(
     (event: KeyboardEvent) => {
@@ -43,16 +31,22 @@ const Search = (props: IProps) => {
         search();
       }
     },
-    [searchValue]
+    [search]
   );
 
   useEffect(() => {
-    document.addEventListener('keydown', startSearch, false);
+    if (searchValue) {
+      document.addEventListener('keydown', startSearch, false);
+    }
 
     return () => {
       document.removeEventListener('keydown', startSearch, false);
     };
-  }, [startSearch]);
+  }, [searchValue, startSearch]);
+
+  useEffect(() => {
+    setSearchValue(searchQuery);
+  }, [searchQuery]);
 
   return (
     <div className={styles.wrapper}>
@@ -81,6 +75,6 @@ const Search = (props: IProps) => {
       </button>
     </div>
   );
-};
+});
 
 export default Search;
