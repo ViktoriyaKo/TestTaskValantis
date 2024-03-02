@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { ICard } from '../../types/types';
 import CustomLink from '../CustomLink/CustomLink';
 import styles from './Card.module.css';
+import getImgSrc from '../../helpers/getImgSrc';
 
 interface Props {
   card: ICard;
@@ -9,7 +10,7 @@ interface Props {
 
 const Card = (props: Props) => {
   const { brand, price, product, id } = props.card;
-  const image = new URL('/jewelry.jpg', location.href).href;
+  const image = getImgSrc('jewelry.jpg');
 
   return (
     <Link to={`/${id}`} className={styles.wrapper}>

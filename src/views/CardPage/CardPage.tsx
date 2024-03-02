@@ -4,10 +4,12 @@ import styles from './CardPage.module.css';
 import { requestToDB } from '../../api/api';
 import { useParams } from 'react-router-dom';
 import { ICard } from '../../types/types';
+import getImgSrc from '../../helpers/getImgSrc';
 
 const CardPage = () => {
   const [product, setProduct] = useState<ICard[]>([]);
   const { id } = useParams();
+  const image = getImgSrc('jewelry.jpg');
 
   useEffect(() => {
     const getData = async () => {
@@ -22,7 +24,7 @@ const CardPage = () => {
         <>
           <div className={styles.content}>
             <img
-              src={'/jewelry.jpg'}
+              src={image}
               alt={product[0].product}
               className={styles.image}
             />

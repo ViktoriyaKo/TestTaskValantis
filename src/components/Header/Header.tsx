@@ -4,10 +4,12 @@ import { Icon } from '../../helpers/Icon';
 import styles from './Header.module.css';
 import { routers } from '../../routers/routers';
 import clsx from 'clsx';
+import getImgSrc from '../../helpers/getImgSrc';
 
 const Header = () => {
   const location = useLocation();
   const pathname = location.pathname;
+  const logo = getImgSrc('logo.png');
 
   const navIcons = [
     {
@@ -26,7 +28,7 @@ const Header = () => {
       </div>
       <div className={styles.wrapper}>
         <Link to={'/'}>
-          <img alt={'logo'} src={'/logo.png'} className={styles.logo} />
+          <img alt={'logo'} src={logo} className={styles.logo} />
         </Link>
         <nav className={styles.navList}>
           {routers.map((router) => {
